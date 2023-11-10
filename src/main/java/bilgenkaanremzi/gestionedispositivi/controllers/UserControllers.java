@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/users")
@@ -36,5 +39,10 @@ public class UserControllers {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findAndDelete(@PathVariable int id){ userService.findAndDelete(id);}
 
-
+    @PostMapping("/upload")
+public String upload(@RequestParam("picture")MultipartFile body) throws IOException{
+        System.out.println(body.getSize());
+        System.out.println(body.getContentType());
+        return userService.uploadPicture(body);
+    }
 }

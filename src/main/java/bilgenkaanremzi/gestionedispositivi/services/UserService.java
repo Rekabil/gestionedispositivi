@@ -3,6 +3,8 @@ package bilgenkaanremzi.gestionedispositivi.services;
 import bilgenkaanremzi.gestionedispositivi.entities.User;
 import bilgenkaanremzi.gestionedispositivi.exceptions.NotFoundException;
 import bilgenkaanremzi.gestionedispositivi.repositories.UserRepository;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,12 +12,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private Cloudinary cloudinary;
     public User save(User body){
         return userRepository.save(body);
     }
@@ -42,4 +49,7 @@ public class UserService {
         return userRepository.save(found);
     }
 
+    public String uploadPicture(MultipartFile file)throws IOException{
+        return (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+    }
 }

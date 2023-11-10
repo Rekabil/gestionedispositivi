@@ -17,6 +17,7 @@ public class DeviceService {
     @Autowired
     private DeviceRepository deviceRepository;
 
+
     public Device save(Device body){
         return deviceRepository.save(body);
     }
