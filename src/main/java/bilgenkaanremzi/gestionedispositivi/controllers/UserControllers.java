@@ -7,6 +7,8 @@ import bilgenkaanremzi.gestionedispositivi.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,9 +25,20 @@ public class UserControllers {
         return userService.GetUsers(page, size, orderby);
     }
 
-    @PostMapping("")
-    @ResponseStatus(HttpStatus.CREATED)
-    public User saveDevice(@RequestBody User body) {return userService.save(body);}
+    @GetMapping("/me")
+    public UserDetails getProfile(@AuthenticationPrincipal UserDetails currentUser){
+        return currentUser;
+    }
+    @PutMapping("/me")
+    public UserDetails getProfile(@AuthenticationPrincipal User currentUser,@RequestBody User body) {
+        return (UserDetails) userService.findAndUpdate(currentUser.getId(),body);
+    }
+
+    @DeleteMapping("/me")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void getProfile(@AuthenticationPrincipal User currentUser){
+        userService.findAndDelete(currentUser.getId());
+    }
 
     @GetMapping("/{id}")
     public User getById(@PathVariable int id) {

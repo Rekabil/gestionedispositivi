@@ -1,4 +1,4 @@
 package bilgenkaanremzi.gestionedispositivi.payloads;
 
-public record UserLoginSiccessDTO(String accessToken) {
+public record UserLoginSuccessDTO(String accessToken) {
 }

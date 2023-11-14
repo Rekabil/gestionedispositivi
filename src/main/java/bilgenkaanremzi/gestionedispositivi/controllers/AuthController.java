@@ -4,9 +4,8 @@ import bilgenkaanremzi.gestionedispositivi.entities.User;
 import bilgenkaanremzi.gestionedispositivi.exceptions.BadRequestException;
 import bilgenkaanremzi.gestionedispositivi.payloads.NewUserDTO;
 import bilgenkaanremzi.gestionedispositivi.payloads.UserLoginDTO;
-import bilgenkaanremzi.gestionedispositivi.payloads.UserLoginSiccessDTO;
+import bilgenkaanremzi.gestionedispositivi.payloads.UserLoginSuccessDTO;
 import bilgenkaanremzi.gestionedispositivi.services.AuthService;
-import bilgenkaanremzi.gestionedispositivi.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -22,12 +21,10 @@ import java.io.IOException;
 public class AuthController {
     @Autowired
     private AuthService authService;
-    @Autowired
-    private UserService userService;
 
     @PostMapping("/login")
-    public UserLoginSiccessDTO login(@RequestBody UserLoginDTO body) {
-        return new UserLoginSiccessDTO(authService.authenticateUser(body));
+    public UserLoginSuccessDTO login(@RequestBody UserLoginDTO body) {
+        return new UserLoginSuccessDTO(authService.authenticateUser(body));
     }
 
     @PostMapping("/register")
@@ -35,7 +32,7 @@ public class AuthController {
         if (validation.hasErrors()) {
             throw new BadRequestException(validation.getAllErrors());
         } else {
-            return userService.save(body);
+            return authService.save(body);
         }
     }
 
